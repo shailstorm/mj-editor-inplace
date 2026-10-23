@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { CANVAS_PROPORTIONS } from '../model/canvas.js'
+import { publicAsset } from '../../asset-urls.js'
 
 export default function CanvasSizeMenu({ value = 'original', onChange, placement = 'bottom', maxHeight, className = '', style }) {
   const [open, setOpen] = useState(false)
@@ -71,7 +72,7 @@ export default function CanvasSizeMenu({ value = 'original', onChange, placement
           }
         }}
       >
-        <img className="asset" src="/icons/proportions.svg" alt="" draggable="false" />
+        <img className="asset" src={publicAsset('/icons/proportions.svg')} alt="" draggable="false" />
         <svg className="canvas-size-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
           <path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

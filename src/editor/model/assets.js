@@ -1,4 +1,4 @@
-import assets from '../../figma-assets.json' with { type: 'json' }
+import assets from '../../asset-urls.js'
 
 export const SAMPLE_PROMPT = 'pink combat boots with thick soles'
 export const originalImage = assets.selection.imgScreenshot20261005At84024Pm1

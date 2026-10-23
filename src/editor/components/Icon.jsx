@@ -1,4 +1,4 @@
-import assets from '../../figma-assets.json'
+import assets from '../../asset-urls.js'
 
 export function Asset({ name, collection = 'selection', className = '' }) {
   return (

@@ -1,6 +1,8 @@
+import { publicAsset } from '../../asset-urls.js'
+
 export const chatboxAssets = {
-  attach: '/figma/chatbox/attach.svg',
-  send: '/figma/chatbox/send.svg',
-  plus: '/figma/chatbox/plus.svg',
-  info: '/figma/chatbox/info.svg',
+  attach: publicAsset('/figma/chatbox/attach.svg'),
+  send: publicAsset('/figma/chatbox/send.svg'),
+  plus: publicAsset('/figma/chatbox/plus.svg'),
+  info: publicAsset('/figma/chatbox/info.svg'),
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:production": "vite build --base=/editor-inplace/",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "node --test tests/*.test.js"
