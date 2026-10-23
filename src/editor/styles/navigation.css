@@ -1,0 +1,144 @@
+.navigation {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 82px;
+  background: #fcfcfd;
+  z-index: 5;
+  cursor: default;
+  user-select: none;
+}
+
+.brand {
+  position: absolute;
+  left: 28px;
+  top: 33.5px;
+  height: 27px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.45px;
+  display: flex;
+  align-items: center;
+  opacity: 0.4;
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0.4;
+}
+
+.nav-items {
+  position: absolute;
+  top: 87px;
+  bottom: 184px;
+  left: 16px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-block: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-item {
+  position: relative;
+  flex-shrink: 0;
+  isolation: isolate;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-bottom: -2px;
+  background: transparent;
+}
+
+.nav-item.active {
+  opacity: 0.5;
+  background: #f2330d1a;
+  border: 1px solid #f2330d1a;
+  box-shadow:
+    0 10px 15px #f2330d0d,
+    0 4px 6px #f2330d0d;
+}
+
+.nav-bottom {
+  position: absolute;
+  left: 22px;
+  bottom: 20px;
+  width: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-bottom > .nav-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.nav-bottom > .account {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f1f2f4;
+  margin-top: 4px;
+}
+
+.help-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.help-corner {
+  position: fixed;
+  top: 24px;
+  right: var(--editor-inset, 24px);
+  z-index: 10;
+}
+
+.mobile-navigation {
+  position: fixed;
+  inset: auto 0 0;
+  height: var(--bottom-nav-height, 68px);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  padding: 8px max(12px, env(safe-area-inset-right)) calc(8px + var(--safe-area-bottom, 0px)) max(12px, env(safe-area-inset-left));
+  border-top: 0.6px solid #e3e4e8;
+  background: #fcfcfd;
+  box-shadow: 0 -2px 12px #33333305;
+  user-select: none;
+  cursor: default;
+  z-index: 15;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #2e3038;
+  font-size: 12px;
+  line-height: 18px;
+  opacity: 0.4;
+}
+
+.mobile-nav-item > .asset,
+.mobile-create-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.mobile-nav-item.active {
+  color: #ff533e;
+  opacity: 0.45;
+}
+
+.mobile-create-icon {
+  background: currentColor;
+  mask: url('/figma/selection-Create.svg') center / contain no-repeat;
+}

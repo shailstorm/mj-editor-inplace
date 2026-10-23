@@ -1,0 +1,44 @@
+.viewport {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #fcfcfd;
+  padding-bottom: var(--bottom-dock-height, 0px);
+}
+
+.asset {
+  display: block;
+  max-width: none;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.floating {
+  background: #fff;
+  border: 0.6px solid #e3e4e8;
+  box-shadow: 0 0 10px #3333330d;
+}
+
+.icon-button {
+  flex-shrink: 0;
+}
+
+.toast {
+  position: absolute;
+  bottom: 91px;
+  left: calc(50% + 41px);
+  transform: translateX(-50%);
+  border: 1px solid #e3e4e8;
+  box-shadow: 0 5px 25px #3331;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #fff;
+  z-index: 30;
+  font-size: 14px;
+  white-space: normal;
+  text-align: center;
+  width: max-content;
+  max-width: calc(100% - 106px);
+}

@@ -1,0 +1,195 @@
+.topbar {
+  position: fixed;
+  left: calc(var(--nav-width, 82px) + var(--editor-inset, 24px));
+  right: var(--editor-inset, 24px);
+  top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 55.2px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.is-stacked .topbar {
+  height: 44.2px;
+}
+
+.editor-toolbar {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+  z-index: 13;
+}
+
+.topbar button {
+  pointer-events: auto;
+}
+
+.projects-button {
+  height: 44.2px;
+  border-radius: 10px;
+  padding: 0 14.6px 0 12.6px;
+  gap: 10px;
+  font-weight: 500;
+  color: #000;
+}
+
+.is-mobile .projects-button {
+  width: 44.2px;
+  padding: 0;
+}
+
+.toolbar {
+  width: max-content;
+  height: 55.2px;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.canvas-proportions {
+  position: absolute;
+  width: max-content;
+  transform: translateX(-100%);
+  z-index: 9;
+}
+
+.history-toolbar,
+.canvas-size-control {
+  flex-shrink: 0;
+}
+
+.history-toolbar {
+  align-self: stretch;
+  border-left: 0.6px solid #e3e4e8;
+}
+
+.tool-group {
+  flex-shrink: 0;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Keep history visible while tools scroll at narrow viewport widths. */
+.toolbar-tools {
+  min-width: 0;
+  flex-shrink: 1;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.tool-group .icon-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 5px;
+}
+
+.tool-group .icon-button:hover:not(:disabled):not(.selected) {
+  background: #f1f2f4;
+}
+
+.tool-group .selected {
+  background: #ff533e;
+}
+
+.tool-group .selected .asset {
+  filter: brightness(0) invert(1);
+}
+
+.tool-group .icon-button:disabled {
+  opacity: 0.26;
+}
+
+.canvas-size-control {
+  position: relative;
+}
+
+.canvas-size-trigger {
+  height: 38px;
+  padding: 0 10px;
+  gap: 8px;
+  border-radius: 10px;
+}
+
+.canvas-size-trigger:hover,
+.canvas-size-trigger[aria-expanded='true'] {
+  background: #fafafa;
+}
+
+.canvas-size-chevron {
+  color: #a2a4ac;
+  transition: transform 120ms ease;
+}
+
+.canvas-size-trigger[aria-expanded='true'] .canvas-size-chevron {
+  transform: rotate(180deg);
+}
+
+.canvas-size-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 136px;
+  padding: 6px;
+  border-radius: 12px;
+  max-height: calc(100dvh - 240px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.canvas-size-control[data-placement='top'] .canvas-size-menu {
+  top: auto;
+  bottom: calc(100% + 10px);
+}
+
+.canvas-size-option {
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 8px;
+  justify-content: flex-start;
+  gap: 8px;
+  border-radius: 7px;
+  color: #2e3038;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.canvas-size-option:hover,
+.canvas-size-option:focus-visible {
+  background: #f5f5f7;
+  outline: none;
+}
+
+.canvas-size-option[aria-checked='true'] {
+  color: #ff533e;
+  background: #fff2ef;
+}
+
+.canvas-proportion-preview {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+}
+
+.canvas-proportion-preview > span {
+  display: block;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+}
+
+.canvas-size-selected {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas-size-chevron {
+    transition: none;
+  }
+}
