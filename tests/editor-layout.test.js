@@ -64,7 +64,7 @@ test('every canvas proportion fits the screen with the entire image and expansio
           near(layout.panelTop, 24)
         }
         if (layout.navWidth === 0) {
-          near(layout.bottomNavHeight, 68 + (viewport.safeAreaBottom ?? 0))
+          near(layout.bottomNavHeight, 52 + (viewport.safeAreaBottom ?? 0))
           near(layout.toolbar.width, Math.min(400, viewport.width - layout.gutter * 2))
         } else {
           assert.equal(layout.bottomNavHeight, 0)
@@ -131,7 +131,7 @@ test('every mobile canvas proportion centers above the bottom toolbar, variation
         x: 0, y: 0, width: viewport.width,
         height: layout.stage.bottom,
       })
-      near(layout.bottomDockHeight, 68 + (viewport.safeAreaBottom ?? 0) + 128 + 55.2 + 8)
+      near(layout.bottomDockHeight, 52 + (viewport.safeAreaBottom ?? 0) + 128 + 55.2 + 8)
       near(layout.toolbar.y + 55.2 + 8, viewport.height - layout.bottomNavHeight - 128)
       near(layout.stage.top, 24 + 78 + 16)
       near(layout.stage.bottom + 16, layout.toolbar.y)

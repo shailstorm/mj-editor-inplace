@@ -1,0 +1,26 @@
+diff --git a/next.config.ts b/next.config.ts
+index ac5a5d2..c9eb18e 100644
+--- a/next.config.ts
++++ b/next.config.ts
+@@ -15,6 +15,14 @@ const nextConfig = {
+   // Serve the independently deployed editor and its assets under shay.city.
+   async rewrites() {
+     return [
++      {
++        source: '/editor-inplace',
++        destination: 'https://mj-editor-inplace.vercel.app/editor-inplace',
++      },
++      {
++        source: '/editor-inplace/:path*',
++        destination: 'https://mj-editor-inplace.vercel.app/editor-inplace/:path*',
++      },
+       {
+         source: '/editor-canvas',
+         destination: 'https://mj-editor-canvas.vercel.app/editor-canvas',
+@@ -33,4 +41,4 @@ const withMDX = createMDX({
+ })
+  
+ // Merge MDX config with Next.js config
+-export default withMDX(nextConfig)
+\ No newline at end of file
++export default withMDX(nextConfig)

@@ -80,6 +80,15 @@ test('compact prompt disclosures expand and collapse the mounted options for bot
   }
 })
 
+test('compact dividers span the panel without SVG images while desktop dividers retain their assets', () => {
+  const compact = renderToStaticMarkup(createElement(PromptPanel, props(initialDocument(), { compact: true, expanded: true })))
+  assert.equal((compact.match(/class="prompt-panel-divider prompt-panel-divider-fluid"/g) ?? []).length, 3)
+  assert.ok(!compact.includes(regionPanelAssets.divider))
+  const desktop = renderToStaticMarkup(createElement(PromptPanel, props(initialDocument())))
+  assert.ok(desktop.includes(regionPanelAssets.divider))
+  assert.doesNotMatch(desktop, /prompt-panel-divider-fluid/)
+})
+
 test('collapsing and switching presentations preserves draft, Aura, references and each photo weight', () => {
   const document = {
     ...initialDocument(), prompt: 'pink combat boots',

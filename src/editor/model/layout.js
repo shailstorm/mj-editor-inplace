@@ -5,7 +5,7 @@ import { fitCanvasBounds } from './canvas.js'
 
 export const IMAGE_SIZE = { width: 831.96, height: 833 }
 export const NAV_WIDTH = 82
-export const MOBILE_NAV_HEIGHT = 68
+export const MOBILE_NAV_HEIGHT = 52
 export const MOBILE_VARIATIONS_HEIGHT = 128
 
 export function canvasBounds(document) {

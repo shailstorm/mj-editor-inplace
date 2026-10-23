@@ -129,7 +129,6 @@ export function useEditor({ notify }) {
     update((current) => appendResults(current, results, batchId, {
       forRegion: Boolean(request.region),
     }))
-    notify('Sample variations ready. Choose an output to edit it in place.')
   }
 
   async function upload(files, reference = false) {

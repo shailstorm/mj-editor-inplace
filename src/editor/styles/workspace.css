@@ -285,6 +285,28 @@
   touch-action: pan-x;
 }
 
+.is-mobile .variation-list::-webkit-scrollbar {
+  display: none;
+}
+
+.is-mobile .variation-scroll-indicator {
+  position: absolute;
+  inset: auto calc(var(--editor-inset, 16px) + 4px) 4px;
+  height: 3px;
+  border-radius: 999px;
+  background: #e3e4e8;
+  pointer-events: none;
+}
+
+.variation-scroll-indicator > span {
+  position: absolute;
+  left: var(--scroll-thumb-left, 0%);
+  width: var(--scroll-thumb-width, 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: #b4b6be;
+}
+
 .variation-thumbnail {
   position: relative;
   width: 80px;

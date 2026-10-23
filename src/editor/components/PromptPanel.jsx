@@ -8,7 +8,7 @@ import { canGeneratePrompt, promptType } from '../model/prompts.js'
 export default function PromptPanel({
   document, inputRef, busy, isSelectingRegion = false, suggestionsOpen,
   actions, closeSuggestions, openReferencePicker,
-  compact = false, expanded = false, detailsId, onToggle,
+  compact = false, expanded = false, detailsId, onToggle, formRef,
 }) {
   const results = document.results.filter((result) => document.promptOutputIds.includes(result.id))
   const type = promptType(document)
@@ -16,18 +16,18 @@ export default function PromptPanel({
   const generateLabel = busy ? 'Generating…' : 'Generate'
   const details = (
     <>
-      <PromptDivider />
+      <PromptDivider fluid={compact} />
       <PromptReferences
         references={document.references}
         onUpload={openReferencePicker}
         onRemove={actions.removeReference}
         onWeightChange={actions.setReferenceWeight}
       />
-      <PromptDivider />
+      <PromptDivider fluid={compact} />
       {type === 'image' && (
         <>
           <AuraSection aura={document.aura} onChange={actions.setAura} />
-          <PromptDivider />
+          <PromptDivider fluid={compact} />
         </>
       )}
       {results.length && !isSelectingRegion ? (
@@ -45,6 +45,7 @@ export default function PromptPanel({
 
   return (
     <form
+      ref={formRef}
       className={`prompt-panel floating${compact ? ' prompt-panel-collapsible' : ''}${results.length ? ' has-output' : ''}`}
       aria-label={`${type === 'image' ? 'Image' : 'Region'} prompt panel`}
       data-prompt-type={type}
