@@ -63,9 +63,10 @@ export default function Editor() {
     setTool: actions.selectTool,
     closePanels,
     cancelGesture: gestures.cancelGesture,
-    showSuggestions: () => {
+    completePrompt: () => {
       promptRef.current?.focus()
-      setPanel('suggestions')
+      // A shortcut outside the field must not replace an existing draft.
+      if (!document.prompt.trim()) actions.applySuggestion()
     },
   })
 
@@ -78,9 +79,9 @@ export default function Editor() {
     inputRef: promptRef,
     busy: editor.busy,
     isSelectingRegion: gestures.isSelectingRegion,
-    suggestionsOpen: panel === 'suggestions',
+    promptCompletion: editor.promptCompletion,
     actions,
-    closeSuggestions: closePanels,
+    closePanels,
     openReferencePicker,
   }
 

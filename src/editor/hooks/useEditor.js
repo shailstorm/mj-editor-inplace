@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDocumentHistory } from './useDocumentHistory.js'
 import { useGeneration } from './useGeneration.js'
 import { useCropSession } from './useCropSession.js'
@@ -15,7 +15,7 @@ import { selectedImages, selectImage } from '../model/selection.js'
 import { SAMPLE_PROMPT } from '../model/assets.js'
 import { imagePoint } from '../model/geometry.js'
 import { createReference, MAX_REFERENCES, setReferenceWeight } from '../model/references.js'
-import { changeAura, promptRequest } from '../model/prompts.js'
+import { changeAura, promptRequest, PROMPT_REVEAL_DURATION, PROMPT_REVEAL_STAGGER } from '../model/prompts.js'
 import { IMAGE_SIZE } from '../model/layout.js'
 import { changeCanvasProportion, imageDimensionsPatch } from '../model/canvas.js'
 import { selectPhotoRegion } from '../services/magic-wand.js'
@@ -28,8 +28,16 @@ export function useEditor({ notify }) {
   const [tool, setTool] = useState('cursor')
   const [panel, setPanel] = useState(null)
   const [promptOpen, setPromptOpen] = useState(false)
+  const [promptCompletion, setPromptCompletion] = useState(null)
   const generation = useGeneration(notify)
   const crop = useCropSession(history)
+
+  useEffect(() => {
+    if (!promptCompletion) return
+    const duration = (Array.from(promptCompletion.text).length - 1) * PROMPT_REVEAL_STAGGER + PROMPT_REVEAL_DURATION
+    const timer = setTimeout(() => setPromptCompletion(null), duration)
+    return () => clearTimeout(timer)
+  }, [promptCompletion])
 
   function undo() {
     if (crop.cancel()) {
@@ -37,6 +45,7 @@ export function useEditor({ notify }) {
       return
     }
     if (!history.canUndo) return
+    setPromptCompletion(null)
     generation.cancel()
     setPromptOpen(false)
     history.undo()
@@ -45,6 +54,7 @@ export function useEditor({ notify }) {
   function redo() {
     if (crop.cancel()) setTool('cursor')
     if (!history.canRedo) return
+    setPromptCompletion(null)
     generation.cancel()
     setPromptOpen(false)
     history.redo()
@@ -102,25 +112,30 @@ export function useEditor({ notify }) {
   }
 
   function applySuggestion() {
+    generation.cancel()
     update({ prompt: SAMPLE_PROMPT, promptOutputIds: [] })
+    setPromptCompletion(globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      ? null
+      : { id: crypto.randomUUID(), text: SAMPLE_PROMPT })
     setPanel(null)
   }
 
-  function setPrompt(prompt) {
+  function setPrompt(prompt, { inputType = 'insertText', isComposing = false } = {}) {
+    const inserting = ['insertText', 'insertFromPaste', 'insertReplacementText'].includes(inputType)
+    if (prompt.trim() === '/' && inserting && !isComposing) {
+      applySuggestion()
+      return
+    }
     generation.cancel()
+    setPromptCompletion(null)
     preview({ prompt, promptOutputIds: [] })
-    if (prompt === '/') setPanel('suggestions')
-    else if (panel === 'suggestions') setPanel(null)
   }
 
   async function generate() {
     if (generation.busy) return
     const request = promptRequest(document)
-    if (!request) {
-      if (!document.image) return
-      setPanel('suggestions')
-      return
-    }
+    if (!request) return
+    setPromptCompletion(null)
     setPanel(null)
     const results = await generation.run(request)
     if (!results) return
@@ -215,6 +230,7 @@ export function useEditor({ notify }) {
     setPanel,
     busy: generation.busy,
     promptOpen,
+    promptCompletion,
     cropDraft: crop.draft,
     actions: {
       undo,
@@ -237,6 +253,7 @@ export function useEditor({ notify }) {
       },
       setImageDimensions: (id, src, size) => preview((current) => imageDimensionsPatch(current, id, src, size)),
       applySuggestion,
+      finishPromptCompletion: () => setPromptCompletion(null),
       setPrompt,
       setAura,
       generate,

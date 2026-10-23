@@ -8,6 +8,7 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { initialDocument, editResult, toggleResultFavorite } from '../src/editor/model/document.js'
 import { imageLayout, regionBounds, workspaceBox } from '../src/editor/model/layout.js'
+import { SAMPLE_PROMPT } from '../src/editor/model/assets.js'
 
 let PromptCard, ReferenceImages, ImageWorkspace, ResultImages, ProjectsDialog, Toolbar, HistoryToolbar, CanvasProportions, Topbar, HelpDialog, HelpButton, Navigation, useImageGestures, useEditor, Editor
 before(async () => {
@@ -144,6 +145,76 @@ test('the workspace starts with one image and no selection or image operations',
   const html = renderToStaticMarkup(createElement(ImageWorkspace, workspaceProps(editor.document)))
   assert.doesNotMatch(html, /selection-box|region-mask|prompt-card|image-operations|canvas-texture|canvas-world/)
   assert.equal((html.match(/data-image=/g) ?? []).length, 1)
+})
+
+function editPrompt(steps) {
+  let editor
+  let step = 0
+  function Capture() {
+    // Capture successive hook states during this server-rendered interaction.
+    // eslint-disable-next-line react/globals
+    editor = useEditor({ notify() {} })
+    steps[step++]?.(editor)
+    return null
+  }
+  renderToStaticMarkup(createElement(Capture))
+  return editor
+}
+
+test('slash fills a complete prompt immediately without a dropdown and can be undone in one step', () => {
+  const editor = editPrompt([
+    ({ actions }) => actions.setPrompt('/'),
+    (current) => {
+      assert.equal(current.document.prompt, SAMPLE_PROMPT)
+      assert.equal(current.panel, null)
+      assert.equal(current.history.undoCount, 1)
+      current.actions.undo()
+    },
+  ])
+  assert.equal(editor.document.prompt, '')
+  assert.equal(editor.history.undoCount, 0)
+})
+
+test('editing during prompt completion preserves the new text and ordinary slashes', () => {
+  const editor = editPrompt([
+    ({ actions }) => actions.setPrompt('/'),
+    ({ actions }) => actions.setPrompt(`${SAMPLE_PROMPT}, black/white laces`),
+  ])
+  assert.equal(editor.document.prompt, `${SAMPLE_PROMPT}, black/white laces`)
+  assert.equal(editor.promptCompletion, null)
+  assert.equal(editor.panel, null)
+})
+
+test('reduced motion fills the same suggestion without starting a reveal', () => {
+  const originalMatchMedia = globalThis.matchMedia
+  globalThis.matchMedia = () => ({ matches: true })
+  try {
+    const editor = editPrompt([({ actions }) => actions.setPrompt('/')])
+    assert.equal(editor.document.prompt, SAMPLE_PROMPT)
+    assert.equal(editor.promptCompletion, null)
+  } finally {
+    if (originalMatchMedia === undefined) delete globalThis.matchMedia
+    else globalThis.matchMedia = originalMatchMedia
+  }
+})
+
+test('deleting, undoing, and composing a slash never replace the draft with a suggestion', () => {
+  for (const event of [
+    { inputType: 'deleteContentBackward' },
+    { inputType: 'deleteContentForward' },
+    { inputType: 'historyUndo' },
+    { inputType: 'historyRedo' },
+    { inputType: 'insertCompositionText', isComposing: true },
+    { inputType: 'insertText', isComposing: true },
+  ]) {
+    const editor = editPrompt([
+      ({ actions }) => actions.setPrompt('/x'),
+      ({ actions }) => actions.setPrompt('/', event),
+    ])
+    assert.equal(editor.document.prompt, '/')
+    assert.equal(editor.promptCompletion, null)
+    assert.equal(editor.history.undoCount, 0)
+  }
 })
 
 test('toolbar, topbar, and help omit canvas navigation', () => {
@@ -545,9 +616,8 @@ function promptProps(document, overrides = {}) {
     layout: imageLayout(document, { width: 1600, height: 1043 }),
     inputRef: { current: null },
     busy: false,
-    suggestionsOpen: false,
     actions: {},
-    closeSuggestions() {},
+    closePanels() {},
     openReferencePicker() {},
     ...overrides,
   }

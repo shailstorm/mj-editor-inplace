@@ -6,8 +6,8 @@ import AuraSection from './AuraSection.jsx'
 import { canGeneratePrompt, promptType } from '../model/prompts.js'
 
 export default function PromptPanel({
-  document, inputRef, busy, isSelectingRegion = false, suggestionsOpen,
-  actions, closeSuggestions, openReferencePicker,
+  document, inputRef, busy, isSelectingRegion = false, promptCompletion,
+  actions, closePanels, openReferencePicker,
   compact = false, expanded = false, detailsId, onToggle, formRef,
 }) {
   const results = document.results.filter((result) => document.promptOutputIds.includes(result.id))
@@ -59,10 +59,10 @@ export default function PromptPanel({
         type={type}
         value={document.prompt}
         inputRef={inputRef}
-        suggestionsOpen={suggestionsOpen}
+        completion={promptCompletion}
         onChange={actions.setPrompt}
-        onApplySuggestion={actions.applySuggestion}
-        closeSuggestions={closeSuggestions}
+        onFinishCompletion={actions.finishPromptCompletion}
+        closePanels={closePanels}
         disclosure={compact && (
           <button
             type="button"

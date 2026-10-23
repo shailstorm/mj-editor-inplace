@@ -95,7 +95,7 @@
   gap: var(--panel-gap);
 }
 
-.prompt-panel-input > input {
+.prompt-panel-input input {
   width: 100%;
   padding: 0;
   height: 18px;
@@ -103,11 +103,11 @@
   color: #141416;
 }
 
-.prompt-panel-input > input::placeholder {
+.prompt-panel-input input::placeholder {
   color: rgb(45 48 55 / 35%);
 }
 
-.prompt-panel-input > input:focus-visible {
+.prompt-panel-input input:focus-visible {
   outline: none;
 }
 
@@ -432,15 +432,6 @@
 
 .prompt-output-image[aria-pressed='true'] .prompt-output-check {
   background: #ff533e;
-}
-
-.prompt-panel .suggestions {
-  top: calc(100% - 8.82px);
-  bottom: auto;
-  left: var(--panel-padding);
-  width: calc(100% - var(--panel-padding) * 2);
-  z-index: 2;
-  font-size: 12.35px;
 }
 
 @media (prefers-reduced-motion: reduce) {

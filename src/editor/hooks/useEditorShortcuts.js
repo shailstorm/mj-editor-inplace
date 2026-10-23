@@ -7,7 +7,7 @@ export function useEditorShortcuts({
   setTool,
   closePanels,
   cancelGesture,
-  showSuggestions,
+  completePrompt,
 }) {
   useEffect(() => {
     function keydown(event) {
@@ -39,9 +39,9 @@ export function useEditorShortcuts({
       }
       const tool = TOOLS.find((item) => item.shortcut.toLowerCase() === key)
       if (tool && !command && !event.altKey) setTool(tool.id)
-      if (event.key === '/') {
+      if (event.key === '/' && !command && !event.altKey && !event.repeat) {
         event.preventDefault()
-        showSuggestions()
+        completePrompt()
       }
     }
 
@@ -49,5 +49,5 @@ export function useEditorShortcuts({
     return () => {
       window.removeEventListener('keydown', keydown)
     }
-  }, [hasImage, actions, setTool, closePanels, cancelGesture, showSuggestions])
+  }, [hasImage, actions, setTool, closePanels, cancelGesture, completePrompt])
 }

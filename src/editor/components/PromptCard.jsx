@@ -2,7 +2,7 @@ import { promptStyle } from '../model/layout.js'
 import { IconButton } from './Icon.jsx'
 import ReferenceImages from './ReferenceImages.jsx'
 import SendIcon from './SendIcon.jsx'
-import PromptSuggestions from './PromptSuggestions.jsx'
+import PromptCompletion from './PromptCompletion.jsx'
 import { selectedRegion } from '../model/selection.js'
 
 export default function PromptCard({
@@ -13,9 +13,9 @@ export default function PromptCard({
   busy,
   isSelectingRegion = false,
   promptOpen = false,
-  suggestionsOpen,
+  promptCompletion,
   actions,
-  closeSuggestions,
+  closePanels,
   openReferencePicker,
 }) {
   if (isSelectingRegion || selectedRegion(document) || !document.selected.length || !promptOpen)
@@ -27,15 +27,10 @@ export default function PromptCard({
     actions.generate()
   }
 
-  function applySuggestion() {
-    actions.applySuggestion()
-    inputRef.current?.focus()
-  }
-
   function keydown(event) {
     if (event.key !== 'Escape') return
     event.stopPropagation()
-    closeSuggestions()
+    closePanels?.()
     event.currentTarget.blur()
   }
 
@@ -51,14 +46,16 @@ export default function PromptCard({
     >
       <div className="prompt-row">
         <IconButton label="Add reference image" name="AddImageUncentered" onClick={addReference} />
-        <input
-          ref={inputRef}
-          aria-label="Describe your edit"
-          placeholder="Type “/” for suggestions"
-          value={document.prompt}
-          onChange={(event) => actions.setPrompt(event.target.value)}
-          onKeyDown={keydown}
-        />
+        <PromptCompletion value={document.prompt} completion={promptCompletion} inputRef={inputRef} onFinish={actions.finishPromptCompletion}>
+          <input
+            ref={inputRef}
+            aria-label="Describe your edit"
+            placeholder="Type '/' for suggestions"
+            value={document.prompt}
+            onChange={(event) => actions.setPrompt(event.target.value, event.nativeEvent)}
+            onKeyDown={keydown}
+          />
+        </PromptCompletion>
         <button
           className="send-button"
           aria-label={busy ? 'Generating preview' : 'Generate variations'}
@@ -75,7 +72,6 @@ export default function PromptCard({
           onRemove={actions.removeReference}
         />
       )}
-      {suggestionsOpen && <PromptSuggestions onApply={applySuggestion} />}
     </form>
   )
 }

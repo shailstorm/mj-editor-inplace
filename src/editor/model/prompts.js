@@ -1,6 +1,9 @@
 import { selectedRegion } from './selection.js'
 import { clamp } from './geometry.js'
 
+export const PROMPT_REVEAL_STAGGER = 18
+export const PROMPT_REVEAL_DURATION = 360
+
 export function initialAura() {
   return { left: '', right: '', balance: 50 }
 }
